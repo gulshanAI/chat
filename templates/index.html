@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html class=''>
+<head>
+
+  <meta charset='UTF-8'>
+  <meta name="robots" content="noindex">
+  <link rel="shortcut icon" type="image/x-icon"  href="http://touchmediaads.com/img/icon.png" />
+  <link rel="mask-icon" type=""  href="http://touchmediaads.com/img/icon.png" color="#111" />
+  <link rel="canonical" href="http://touchmediaads.com/img/icon.png" />
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+
+  <script src="https://use.typekit.net/hoy3lrg.js"></script>
+  <script>
+    try {
+      Typekit.load({
+        async: true
+      });
+    } catch (e) {}
+  </script>
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+  <link rel="stylesheet" href="{% static "css/main.css" %}">
+</head>
+
+<body>
+
+  <div id="frame">
+    <div id="sidepanel">
+      <div id="profile">
+        <div class="wrap">
+          <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
+          <p>{{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+      </div>
+      <div id="search">
+        <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+        <input type="text" placeholder="Search contacts..." />
+      </div>
+      <div id="contacts">
+        <ul>
+          {% for us in allusers %}
+            <li class="contact">
+              <a href="{% url 'home' us.id %}">
+                <div class="wrap">
+                    <span class="contact-status online"></span>
+                    <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                    <div class="meta">
+                      <p class="name">{{ us.first_name }}</p>
+                      <p class="preview">Click to read & send message</p>
+                    </div>
+                  </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+      <div class="contact-profile">
+        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+        <p>{{ userdata.first_name}} {{ userdata.last_name}}</p>
+      </div>
+      <div class="messages">
+        <ul>
+          {% for msg in chats %}
+  
+            {% if msg.reply.id != userdata.id %}
+              <li class="replies">
+                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                <p>{{ msg }}</p>
+              </li>
+            {% else %}
+              <li class="sent">
+                <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+                <p>{{ msg }}</p>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="message-input">
+        <div class="wrap">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="usermsg" placeholder="Write your message..." />
+                <input type="hidden" name="oppo" value="{{ userdata.id }}">
+                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <button class="submit" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+  <script>
+    $(document).ready(function () {
+      $('.messages').animate({
+          scrollTop: $(".message-input").offset().top},
+        'fast');
+    });
+  </script>
+</body>
+
+</html>
